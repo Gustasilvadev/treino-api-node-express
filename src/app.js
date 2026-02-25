@@ -13,7 +13,7 @@ app.use(express.json());
 //Middlewares de log
 app.use(logger);
 
-app.use("api/v1/users", usersRoutes);
+app.use("/api/v1/users", usersRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

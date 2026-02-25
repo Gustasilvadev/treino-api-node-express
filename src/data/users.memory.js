@@ -11,7 +11,7 @@ function getAll(){
 }
 
 function getById(id){
-    return users.find(u => u.id === id) || null;
+    return users.find(u => u.id === parseInt(id, 10)) || null;
 }
 
 function createUser(name){
@@ -20,16 +20,34 @@ function createUser(name){
         id: nextId,
         name: name.trim()
             .toLowerCase()
-            .split(' ')
             .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1))
-            .join(' ')
     };
     users.push(newUser);
     return newUser;
 }
 
+function update(id, name){
+    const user = getById(id);
+    if (!user) return null;
+
+    const index = users.findIndex(u => u.id === parseInt(id, 10));
+    users[index].name = name.trim()
+        .toLowerCase()
+        .map(palavra => palavra.charAt(0).toUpperCase() + palavra.slice(1))
+    return users[index];
+}
+
+function deleteById(id){
+    const index = users.findIndex(u => u.id === parseInt(id, 10));
+    if (index === -1) return false;
+    users.splice(index, 1);
+    return true;
+}
+
 module.exports = {
     getAll,
     getById,
-    createUser
+    createUser,
+    update,
+    deleteById
 };
