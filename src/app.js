@@ -10,6 +10,11 @@ const errorHandler = require("./middlewares/errorHandler");
 
 const authRoutes = require("./routes/auth.routes");
 const usersRoutes = require("./routes/users.routes");
+const db = require("./database/models");
+
+db.sequelize.authenticate()
+ .then(() => console.log("DB conectado com sucesso!"))
+ .catch((err) => console.error("Erro ao conectar no DB:", err));
 
 const app = express();
 
@@ -25,3 +30,4 @@ app.use("/api/v1/users", usersRoutes);
 app.use(notFound);
 app.use(errorHandler);
 module.exports = app;
+
