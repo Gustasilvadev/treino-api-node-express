@@ -1,29 +1,36 @@
-const { Contato } = require("../database/models"); // Mantemos o nome do model como está no banco
+const repo = require("../database/repository/contact.repository");
 
-async function createContact(data) {
-    return await Contato.create(data);
+function list() {
+  return repo.findAll();
 }
 
-async function listContacts(userId) {
-    const whereClause = userId ? { idUsuario: userId } : {};
-    return await Contato.findAll({ where: whereClause });
+function get(id) {
+  return repo.findById(id);
 }
 
-async function getContactById(id) {
-    return await Contato.findByPk(id);
+async function create(payload) {
+  const novo = await repo.create(payload);
+  return repo.findById(novo.id);
 }
 
-async function updateContact(id, data) {
-    const contact = await Contato.findByPk(id);
-    if (!contact) return null;
-    return await contact.update(data);
+async function update(id, payload) {
+  const data = { ...payload };
+  
+  const affected = await repo.update(id, data);
+  if (!affected) return null;
+  
+  return repo.findById(id);
 }
 
-async function deleteContact(id) {
-    const contact = await Contato.findByPk(id);
-    if (!contact) return false;
-    await contact.destroy();
-    return true;
+async function remove(id) {
+  const affected = await repo.remove(id);
+  return affected > 0;
 }
 
-module.exports = { createContact, listContacts, getContactById, updateContact, deleteContact };
+module.exports = { 
+    list, 
+    get, 
+    create, 
+    update, 
+    remove 
+};

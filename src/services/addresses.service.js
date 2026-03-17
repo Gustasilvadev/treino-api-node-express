@@ -1,52 +1,36 @@
-const addressService = require("./addresses.service");
+const repo = require("../database/repository/address.repository");
 
-async function create(req, res, next) {
-    try {
-        const data = { ...req.body, idUsuario: req.user.sub };
-        const address = await addressService.createAddress(data);
-        res.status(201).json(address);
-    } catch (error) {
-        next(error);
-    }
+function list() {
+  return repo.findAll();
 }
 
-async function list(req, res, next) {
-    try {
-        const addresses = await addressService.listAddresses();
-        res.json(addresses);
-    } catch (error) {
-        next(error);
-    }
+function get(id) {
+  return repo.findById(id);
 }
 
-async function getById(req, res, next) {
-    try {
-        const address = await addressService.getAddressById(req.params.id);
-        if (!address) return res.status(404).json({ message: "Address not found" });
-        res.json(address);
-    } catch (error) {
-        next(error);
-    }
+async function create(payload) {
+  const novo = await repo.create(payload);
+  return repo.findById(novo.id);
 }
 
-async function update(req, res, next) {
-    try {
-        const address = await addressService.updateAddress(req.params.id, req.body);
-        if (!address) return res.status(404).json({ message: "Address not found" });
-        res.json(address);
-    } catch (error) {
-        next(error);
-    }
+async function update(id, payload) {
+  const data = { ...payload };
+  
+  const affected = await repo.update(id, data);
+  if (!affected) return null;
+  
+  return repo.findById(id);
 }
 
-async function remove(req, res, next) {
-    try {
-        const success = await addressService.deleteAddress(req.params.id);
-        if (!success) return res.status(404).json({ message: "Address not found" });
-        res.status(204).send();
-    } catch (error) {
-        next(error);
-    }
+async function remove(id) {
+  const affected = await repo.remove(id);
+  return affected > 0;
 }
 
-module.exports = { create, list, getById, update, remove };
+module.exports = { 
+    list, 
+    get, 
+    create, 
+    update, 
+    remove 
+};

@@ -1,52 +1,68 @@
-const contactService = require("../services/contact.service");
-
-async function create(req, res, next) {
-    try {
-        const data = { ...req.body, idUsuario: req.user.sub };
-        const contact = await contactService.createContact(data);
-        res.status(201).json(contact);
-    } catch (error) {
-        next(error);
-    }
-}
+const service = require("../services/contact.service");
 
 async function list(req, res, next) {
-    try {
-        const contacts = await contactService.listContacts();
-        res.json(contacts);
-    } catch (error) {
-        next(error);
-    }
+  try {
+    const data = await service.list();
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function getById(req, res, next) {
-    try {
-        const contact = await contactService.getContactById(req.params.id);
-        if (!contact) return res.status(404).json({ message: "Contact not found" });
-        res.json(contact);
-    } catch (error) {
-        next(error);
+  try {
+    const { id } = req.params;
+    const data = await service.get(id);
+    if (!data) {
+      return res.status(404).json({ message: "Contato não encontrado" });
     }
+    res.json(data);
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function create(req, res, next) {
+  try {
+    // Adiciona o idUsuario pegando do token JWT (req.user.sub)
+    const payload = { ...req.body, idUsuario: req.user.sub };
+    const created = await service.create(payload);
+    res.status(201).json(created);
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function update(req, res, next) {
-    try {
-        const contact = await contactService.updateContact(req.params.id, req.body);
-        if (!contact) return res.status(404).json({ message: "Contact not found" });
-        res.json(contact);
-    } catch (error) {
-        next(error);
+  try {
+    const { id } = req.params;
+    const updated = await service.update(id, req.body);
+    if (!updated) {
+      return res.status(404).json({ message: "Contato não encontrado" });
     }
+    res.json(updated);
+  } catch (err) {
+    next(err);
+  }
 }
 
 async function remove(req, res, next) {
-    try {
-        const success = await contactService.deleteContact(req.params.id);
-        if (!success) return res.status(404).json({ message: "Contact not found" });
-        res.status(204).send();
-    } catch (error) {
-        next(error);
+  try {
+    const { id } = req.params;
+    const ok = await service.remove(id);
+    if (!ok) {
+      return res.status(404).json({ message: "Contato não encontrado" });
     }
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
 }
 
-module.exports = { create, list, getById, update, remove };
+module.exports = { 
+  list, 
+  getById, 
+  create, 
+  update, 
+  remove 
+};

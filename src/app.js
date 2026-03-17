@@ -31,8 +31,8 @@ app.use(logger);
 
 app.use("/auth", authRoutes);
 app.use("/api/v1/users", usersRoutes);
-app.use('/api/v1/addresses', addressRoutes);
-app.use('/api/v1/contacts', contactRoutes);
+app.use("/addresses", addressRoutes);
+app.use("/contacts", contactRoutes);
 app.use(notFound);
 app.use(errorHandler);
 module.exports = app;
