@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
             senha: { type: DataTypes.STRING(120), allowNull: false },
             dataNascimento: { type: DataTypes.DATEONLY, allowNull: true },
             rg: { type: DataTypes.STRING(20), allowNull: true },
-            cpf: { type: DataTypes.STRING(20), allowNull: true, unique: true }
+            cpf: { type: DataTypes.STRING(20), allowNull: true, unique: true },
         },
         {
             tableName: "usuarios",
