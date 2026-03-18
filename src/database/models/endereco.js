@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes) => {
             complemento: { type: DataTypes.STRING(100), allowNull: true },
             bairro: { type: DataTypes.STRING(100), allowNull: false },
             cidade: { type: DataTypes.STRING(100), allowNull: false },
-            estado: { type: DataTypes.STRING(2), allowNull: false }
+            estado: { type: DataTypes.STRING(2), allowNull: false },
+            createdAt: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
+            updatedAt: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW }
         },
         {
             tableName: "enderecos",

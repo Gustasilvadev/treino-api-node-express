@@ -5,9 +5,6 @@ const usersController = require('../controllers/users.controller');
 const { authenticationToken } = require("../middlewares/authenticationToken");
 const authorizeRoles = require("../middlewares/authorizeRole").authorizeRoles;
 
-// --- ROTAS PÚBLICAS
-// GET /api/v1/users
-
 /**
  * @swagger
  * /api/v1/users:
@@ -18,9 +15,8 @@ const authorizeRoles = require("../middlewares/authorizeRole").authorizeRoles;
  *      200:
  *        description: Lista de usuários retornada com sucesso
  */
-router.get("/", usersController.list);
+router.get("/",authenticationToken,authorizeRoles("admin","user"), usersController.list);
 
-// GET /api/v1/users/:id
 /**
  * @swagger
  * /api/v1/users/{id}:
@@ -40,17 +36,8 @@ router.get("/", usersController.list);
  *      404:
  *        description: Usuário não encontrado
  */
-router.get("/:id", usersController.getById);
+router.get("/:id",authenticationToken,authorizeRoles("admin","user"), usersController.getById);
 
-
-// --- ROTAS PROTEGIDAS
-// POST /api/v1/users
-
-// router.post("/", 
-//   authenticationToken, 
-//   authorizeRoles("user", "admin"), 
-//   usersController.create
-// );
 
 /**
  * @swagger
@@ -73,9 +60,8 @@ router.get("/:id", usersController.getById);
  *      201:
  *         description: Usuário criado com sucesso
  */
-router.post("/", usersController.create);
+router.post("/",authenticationToken,authorizeRoles("admin"), usersController.create);
 
-// PUT /api/v1/users/:id
 /**
  * @swagger
  * /api/v1/users/{id}:
@@ -118,7 +104,7 @@ router.put("/:id",
   usersController.update
 );
 
-// DELETE /api/v1/users/:id
+
 /**
  * @swagger
  * /api/v1/users/{id}:

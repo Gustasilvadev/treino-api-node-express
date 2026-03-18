@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const contactController = require("../controllers/contact.controller");
 const { authenticationToken } = require("../middlewares/authenticationToken");
-
+const authorizeRoles = require("../middlewares/authorizeRole").authorizeRoles;
 router.use(authenticationToken);
 
 /**
@@ -27,7 +27,7 @@ router.use(authenticationToken);
  *       500:
  *         description: Internal server error
  */
-router.post("/", contactController.create);
+router.post("/",authorizeRoles("admin"), contactController.create);
 
 /**
  * @swagger
@@ -45,7 +45,7 @@ router.post("/", contactController.create);
  *       500:
  *         description: Internal server error
  */
-router.get("/", contactController.list);
+router.get("/",authorizeRoles("admin","user"), contactController.list);
 
 /**
  * @swagger
@@ -72,7 +72,7 @@ router.get("/", contactController.list);
  *       500:
  *         description: Internal server error
  */
-router.get("/:id", contactController.getById);
+router.get("/:id",authorizeRoles("admin","user"), contactController.getById);
 
 /**
  * @swagger
@@ -105,7 +105,7 @@ router.get("/:id", contactController.getById);
  *       500:
  *         description: Internal server error
  */
-router.put("/:id", contactController.update);
+router.put("/:id",authorizeRoles("admin"), contactController.update);
 
 /**
  * @swagger
@@ -132,6 +132,6 @@ router.put("/:id", contactController.update);
  *       500:
  *         description: Internal server error
  */
-router.delete("/:id", contactController.remove);
+router.delete("/:id",authorizeRoles("admin"), contactController.remove);
 
 module.exports = router;

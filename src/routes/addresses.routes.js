@@ -4,7 +4,7 @@ const addressController = require("../controllers/addresses.controller");
 const { authenticationToken } = require("../middlewares/authenticationToken");
 
 router.use(authenticationToken);
-
+const authorizeRoles = require("../middlewares/authorizeRole").authorizeRoles;
 /**
  * @swagger
  * /addresses:
@@ -23,7 +23,7 @@ router.use(authenticationToken);
  *       201:
  *         description: Address criada com sucesso
  */
-router.post("/", addressController.create);
+router.post("/",authorizeRoles("admin"), addressController.create);
 
 /**
  * @swagger
@@ -37,7 +37,7 @@ router.post("/", addressController.create);
  *       200:
  *         description: Lista de addresses retornada com sucesso
  */
-router.get("/", addressController.list);
+router.get("/",authorizeRoles("admin","user"), addressController.list);
 
 /**
  * @swagger
@@ -58,7 +58,7 @@ router.get("/", addressController.list);
  *       200:
  *         description: Address encontrada com sucesso
  */
-router.get("/:id", addressController.getById);
+router.get("/:id",authorizeRoles("admin","user"), addressController.getById);
 
 /**
  * @swagger
@@ -85,7 +85,7 @@ router.get("/:id", addressController.getById);
  *       200:
  *         description: Address atualizada com sucesso
  */
-router.put("/:id", addressController.update);
+router.put("/:id",authorizeRoles("admin"), addressController.update);
 
 /**
  * @swagger
@@ -106,6 +106,6 @@ router.put("/:id", addressController.update);
  *       200:
  *         description: Address removida com sucesso
  */
-router.delete("/:id", addressController.remove);
+router.delete("/:id",authorizeRoles("admin"), addressController.remove);
 
 module.exports = router;
