@@ -1,4 +1,5 @@
-const swaggerJsdoc = require('swagger-jsdoc');
+//const swaggerJsdoc = require('swagger-jsdoc');
+const swaggerAutogen = require('swagger-autogen')();
     const options = {
         definition: {
             openapi: '3.0.0',
@@ -25,5 +26,8 @@ const swaggerJsdoc = require('swagger-jsdoc');
         },
         apis: ['./src/routes/*.js']
     };
-const swaggerSpec = swaggerJsdoc(options);
-module.exports = swaggerSpec;
+// const swaggerSpec = swaggerJsdoc(options);
+// module.exports = swaggerSpec;
+const outputFile = './src/docs/swagger_output.json';
+const endpointsFiles = ['./src/app.js'];
+swaggerAutogen(outputFile, endpointsFiles, options);

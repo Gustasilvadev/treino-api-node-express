@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
+    "swagger-autogen": "node ./src/docs/swagger.js",
     "start": "node src/server.js",
     "dev": "nodemon src/server.js"
   },
@@ -13,6 +14,7 @@
     "jsonwebtoken": "^9.0.3",
     "mysql2": "^3.18.2",
     "sequelize": "^6.37.7",
+    "swagger-autogen": "^2.23.7",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
   },
